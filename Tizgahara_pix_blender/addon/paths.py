@@ -13,7 +13,7 @@ def root_from_context(context: bpy.types.Context) -> Path:
         return as_path(prefs.root_dir)
     if bpy.data.filepath:
         return Path(bpy.path.abspath("//")).resolve()
-    return Path.home() / "blender_aseprite_companion"
+    return Path.home() / "Tizgahara_pix_blender"
 
 
 def ensure_base_dirs(context: bpy.types.Context) -> dict[str, Path]:

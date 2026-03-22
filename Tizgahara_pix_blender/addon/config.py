@@ -4,7 +4,7 @@ import bpy
 
 
 def get_prefs(context: bpy.types.Context):
-    addon = context.preferences.addons.get("blender_aseprite_companion")
+    addon = context.preferences.addons.get("Tizgahara_pix_blender")
     if not addon:
         return None
     return addon.preferences

@@ -4,7 +4,7 @@ from .constants import PANEL_CATEGORY
 
 
 class BAC_PT_main_panel(bpy.types.Panel):
-    bl_label = "Aseprite Companion"
+    bl_label = "Tizgahara_pix_blender"
     bl_idname = "BAC_PT_main_panel"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"

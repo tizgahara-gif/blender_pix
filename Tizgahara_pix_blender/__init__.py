@@ -1,5 +1,5 @@
 bl_info = {
-    "name": "Blender Aseprite Companion",
+    "name": "Tizgahara_pix_blender",
     "author": "Codex",
     "version": (0, 1, 0),
     "blender": (4, 0, 0),

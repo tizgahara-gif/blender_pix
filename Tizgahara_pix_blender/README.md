@@ -1,4 +1,4 @@
-# Blender Aseprite Companion Add-on
+# Tizgahara_pix_blender Add-on
 
 Blender 内の PixelArt 向けテクスチャ編集を Aseprite extension と連携するための companion add-on です。
 
