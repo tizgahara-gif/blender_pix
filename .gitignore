@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+
+# Blender extension build artifacts
+*/dist/
+*/addon.zip
