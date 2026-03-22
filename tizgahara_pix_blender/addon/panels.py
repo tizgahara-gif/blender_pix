@@ -27,7 +27,8 @@ class BAC_PT_main_panel(bpy.types.Panel):
         if prefs:
             sync_box = layout.box()
             sync_box.label(text="Auto Sync (Relay)")
-            sync_box.prop(prefs, "relay_enabled", text="Enabled")
+            sync_box.prop(prefs, "auto_sync_enabled", text="Auto Sync")
+            sync_box.prop(prefs, "relay_enabled", text="Relay Enabled")
             sync_box.label(text=relay_status_summary())
 
         col.separator()
