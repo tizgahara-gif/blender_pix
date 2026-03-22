@@ -52,7 +52,7 @@ unzip -l ./dist/tizgahara_pix_blender-0.1.0.zip
 ## 使用方法（実運用フロー）
 
 ### 事前準備
-1. テクスチャ画像を外部ファイルとして保存済みにする（Packed Image 不可）
+1. テクスチャ画像は外部ファイルでも generated image（未保存）でも可（Packed Image は不可）
 2. Mesh Object に Material + Image Texture Node を設定
 3. 編集対象 Object を Active にする
 4. 3D View > Sidebar > **PixelArt** > **Tizgahara Pix Blender** パネルを開く
@@ -80,7 +80,7 @@ unzip -l ./dist/tizgahara_pix_blender-0.1.0.zip
 
 - **Generate Aseprite Job**
   - 目的: Aseprite 側編集の入力を確定
-  - 動作: revision 採番、source 画像コピー、必要に応じ UV ガイド出力、job JSON 生成、recent jobs/state 更新
+  - 動作: revision 採番、外部画像は source へコピー・generated image は source PNG を直接生成、必要に応じ UV ガイド出力、job JSON 生成、recent jobs/state 更新
 
 - **Export UV Guide**
   - 目的: 単独で UV レイアウト画像を出力

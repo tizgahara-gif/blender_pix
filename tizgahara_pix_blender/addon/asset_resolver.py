@@ -7,9 +7,11 @@ import bpy
 @dataclass
 class ResolvedAsset:
     image: bpy.types.Image
-    image_path: Path
+    image_path: Path | None
     object_name: str
     material_name: str
+    is_generated: bool
+    is_packed: bool
 
 
 def resolve_active_asset(context: bpy.types.Context) -> ResolvedAsset:
@@ -35,10 +37,15 @@ def resolve_active_asset(context: bpy.types.Context) -> ResolvedAsset:
 
     if not image:
         raise ValueError("No image texture node with image found.")
-    if image.packed_file:
-        raise ValueError("Packed image is unsupported. Please unpack or save externally.")
-    if not image.filepath:
-        raise ValueError("Image has no filepath.")
 
-    image_path = Path(bpy.path.abspath(image.filepath)).expanduser().resolve()
-    return ResolvedAsset(image=image, image_path=image_path, object_name=obj.name, material_name=mat.name)
+    has_filepath = bool(image.filepath)
+    image_path = Path(bpy.path.abspath(image.filepath)).expanduser().resolve() if has_filepath else None
+
+    return ResolvedAsset(
+        image=image,
+        image_path=image_path,
+        object_name=obj.name,
+        material_name=mat.name,
+        is_generated=not has_filepath,
+        is_packed=bool(image.packed_file),
+    )

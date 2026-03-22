@@ -1,9 +1,9 @@
 from pathlib import Path
-import shutil
 
 import bpy
 
 from ..asset_resolver import resolve_active_asset
+from ..image_source import ensure_image_file_for_job
 from ..job_io import build_job_payload, write_job
 from ..paths import ensure_base_dirs, file_stem_safe
 from ..recent_jobs import push_recent_job
@@ -28,7 +28,7 @@ class BAC_OT_generate_job(bpy.types.Operator):
 
             source_path = dirs["source"] / f"{base}_{rev_tag}.png"
             export_path = dirs["export"] / f"{base}_{rev_tag}.png"
-            shutil.copy2(asset.image_path, source_path)
+            ensured_source = ensure_image_file_for_job(asset=asset, source_path=source_path, scene=context.scene)
 
             guide_paths = []
             if settings.include_uv_guide:
@@ -39,7 +39,7 @@ class BAC_OT_generate_job(bpy.types.Operator):
             payload = build_job_payload(
                 asset=asset,
                 map_type=settings.map_type,
-                source_path=source_path,
+                source_path=ensured_source,
                 export_path=export_path,
                 guide_paths=guide_paths,
                 revision=rev,
