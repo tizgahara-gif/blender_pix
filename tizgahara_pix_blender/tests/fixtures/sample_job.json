@@ -1,0 +1,20 @@
+{
+  "schema": "blender-aseprite-job.v1",
+  "created_at": "2026-03-22T00:00:00+00:00",
+  "revision": 1,
+  "revision_tag": "r001",
+  "asset": {
+    "object_name": "Cube",
+    "material_name": "Mat_Pixel",
+    "image_name": "tex_albedo.png",
+    "image_path": "/project/textures/tex_albedo.png"
+  },
+  "task": {
+    "map_type": "ALBEDO",
+    "source_path": "/project/aseprite_jobs/sources/Cube_tex_albedo_r001.png",
+    "export_path": "/project/aseprite_jobs/exports/Cube_tex_albedo_r001.png",
+    "guides": [
+      "/project/aseprite_jobs/sources/Cube_tex_albedo_r001_uv.png"
+    ]
+  }
+}

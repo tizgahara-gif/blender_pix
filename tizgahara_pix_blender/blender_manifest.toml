@@ -1,0 +1,9 @@
+schema_version = "1.0.0"
+id = "tizgahara_pix_blender"
+version = "0.1.0"
+name = "Tizgahara Pix Blender"
+tagline = "Generate Aseprite edit jobs and safely reload exported textures"
+maintainer = "tizgahara-gif"
+type = "add-on"
+blender_version_min = "4.2.0"
+license = ["SPDX:GPL-3.0-or-later"]
