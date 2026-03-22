@@ -4,6 +4,7 @@ import bpy
 
 from ..asset_resolver import resolve_active_asset
 from ..image_reload import reload_image_from_export
+from ..relay_sync import register_export_target
 
 
 class BAC_OT_reload_exported_image(bpy.types.Operator):
@@ -17,7 +18,9 @@ class BAC_OT_reload_exported_image(bpy.types.Operator):
             return {"CANCELLED"}
         try:
             asset = resolve_active_asset(context)
-            reload_image_from_export(asset.image, Path(scene_props.last_export_path))
+            export_path = Path(scene_props.last_export_path)
+            reload_image_from_export(asset.image, export_path)
+            register_export_target(asset.image, export_path)
             self.report({"INFO"}, "Image reloaded from export")
             return {"FINISHED"}
         except Exception as exc:

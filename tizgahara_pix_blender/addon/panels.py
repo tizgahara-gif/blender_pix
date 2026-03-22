@@ -1,6 +1,8 @@
 import bpy
 
+from .config import get_prefs
 from .constants import PANEL_CATEGORY
+from .relay_sync import relay_status_summary
 
 
 class BAC_PT_main_panel(bpy.types.Panel):
@@ -14,12 +16,20 @@ class BAC_PT_main_panel(bpy.types.Panel):
         layout = self.layout
         settings = context.scene.bac_addon
         scene_props = context.scene.bac_scene
+        prefs = get_prefs(context)
 
         col = layout.column(align=True)
         col.prop(settings, "map_type")
         col.prop(settings, "include_uv_guide")
         if settings.include_uv_guide:
             col.prop(settings, "uv_guide_size")
+
+        if prefs:
+            sync_box = layout.box()
+            sync_box.label(text="Auto Sync (Relay)")
+            sync_box.prop(prefs, "auto_sync_enabled", text="Auto Sync")
+            sync_box.prop(prefs, "relay_enabled", text="Relay Enabled")
+            sync_box.label(text=relay_status_summary())
 
         col.separator()
         col.operator("bac.validate_asset", icon="CHECKMARK")

@@ -13,6 +13,7 @@ from .preferences import BAC_AddonPreferences
 from .props.addon_props import BAC_AddonProps
 from .props.image_props import BAC_ImageProps
 from .props.scene_props import BAC_SceneProps
+from .relay_sync import ensure_timer_registered, on_load_post, stop_timer
 
 CLASSES = (
     BAC_AddonPreferences,
@@ -39,8 +40,16 @@ def register():
     bpy.types.Scene.bac_scene = bpy.props.PointerProperty(type=BAC_SceneProps)
     bpy.types.Image.bac_image = bpy.props.PointerProperty(type=BAC_ImageProps)
 
+    ensure_timer_registered()
+    if on_load_post not in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.append(on_load_post)
+
 
 def unregister():
+    stop_timer()
+    if on_load_post in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.remove(on_load_post)
+
     del bpy.types.Image.bac_image
     del bpy.types.Scene.bac_scene
     del bpy.types.Scene.bac_addon

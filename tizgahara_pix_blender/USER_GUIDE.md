@@ -1,23 +1,19 @@
 # USER GUIDE
 
-## 事前準備
-- Active object に material と image texture node を設定
-- packed image は非対応（unpack もしくは外部保存が必要）
-- generated image（`image.filepath` 空）も job 生成可能
+## 基本
+- Packed image は非対応
+- generated image（filepath空）は source PNG を生成して job 化
 
-## 基本フロー
-1. `Validate Asset`
-2. `Generate Aseprite Job`
-3. 必要に応じて `Launch Aseprite`
-4. Aseprite extension が `export_path` へ PNG 出力
-5. `Reload Exported Image`
+## Blender Auto Sync (Relay)
+1. Preferences で `auto_sync_enabled` と `relay_enabled` を ON
+2. `relay_inbox_path` を設定
+3. `Generate Aseprite Job` 実行
+4. Aseprite 側が `job.task.export_path` に export
+5. Relay が `texture_exported` を inbox へ追記
+6. Blender がイベントを poll し、`reload_settle_delay` 後に `Image.reload()`
 
-## generated image の扱い
-- `image.filepath` が空の画像は、`sources/<asset>_<rev>.png` に PNG として書き出してから job 化
-- job JSON の `task.source_path` は、この生成された source PNG を指す
-- Blender 内の元 image datablock は破壊しない
-
-## 運用注意
-- `export_path` 未生成時の reload はエラー停止
-- revision は `*_rNNN.json` で採番
-- source は revision ごとにコピー/生成され、元画像を直接上書きしない
+## Aseprite 側の使い方（概要）
+- Open Blender Job 後、変更を debounce して `saveCopyAs(job.task.export_path)`
+- Save/Save As と Blender export は分離
+- relay 未接続時は notify 失敗しても extension は落とさない
+- guide layer は export に含めない
