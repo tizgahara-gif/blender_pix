@@ -1,25 +1,22 @@
-# USER GUIDE
+# USER GUIDE (Blender side)
 
-## 基本
-- Packed image は非対応
-- generated image（filepath空）は source PNG を生成して job 化
+## 事前準備
+- Active object に material と image texture node を設定
+- packed image は非対応
+- generated image（filepath空）は source PNG 生成で対応
 
-## Blender Auto Sync (Relay)
-1. Preferences で `auto_sync_enabled` と `relay_enabled` を ON
+## 基本フロー
+1. `Validate Asset`
+2. `Generate Aseprite Job`
+3. 必要に応じて `Export UV Guide`
+4. Aseprite 側（別 repo）で編集・export
+5. `Reload Exported Image` または Auto Sync で反映
+
+## Auto Sync (Relay)
+1. Preferences で `auto_sync_enabled` / `relay_enabled` を ON
 2. `relay_inbox_path` を設定
-3. `Generate Aseprite Job` 実行
-4. Aseprite 側が `job.task.export_path` に export
-5. Relay が `texture_exported` を inbox へ追記
-6. Blender がイベントを poll し、`reload_settle_delay` 後に `Image.reload()`
+3. relay inbox(JSONL)へ `texture_exported` イベントが入ると、自動で `Image.reload()`
 
-## Aseprite 側の使い方（概要）
-- Open Blender Job 後、変更を debounce して `saveCopyAs(job.task.export_path)`
-- Save/Save As と Blender export は分離
-- relay 未接続時は notify 失敗しても extension は落とさない
-- guide layer は export に含めない
-
-
-## Job JSON 出力形式
-- top-level task は旧互換のため維持
-- `data.task.guides` はオブジェクト形式で出力 (`uv_guide_path`, `id_map_path`, `palette_path`, `mask_paths`, `extra_paths`)
-- `data.task.width` / `height` / `color_mode` を含む
+## Job JSON
+- 本 add-on は external consumer 向けに `data.task.*` を含む JSON を生成
+- 詳細 parser 実装は `tizgahara-gif/aseprite_addon` を参照

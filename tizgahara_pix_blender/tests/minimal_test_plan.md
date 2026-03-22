@@ -1,12 +1,10 @@
-# Minimal Test Plan
+# Minimal Test Plan (Blender side)
 
 1. Blender で add-on 有効化
-2. Preferences で `relay_inbox_path` を設定
-3. テクスチャ付き object で `Generate Aseprite Job` 実行
-4. `aseprite_jobs/*.json` が nested schema (`data.task.*`) で生成されること
-   - `data.task.guides.uv_guide_path` が存在
-   - `data.task.width` / `height` / `color_mode` が存在
-5. Relay inbox に `texture_exported` イベント(JSONL)を追記
-6. `reload_settle_delay` 後に Blender image が自動更新されること
-7. blend 再読込後も同イベントで自動更新すること
-8. relay 停止/不正JSON時も Blender が落ちないこと
+2. Preferences で `Workspace Root` と `relay_inbox_path` を設定
+3. `Generate Aseprite Job` 実行
+4. `aseprite_jobs/*.json` に `data.task.source_path/export_path/guides.uv_guide_path` が出ること
+5. `Export UV Guide` 実行で guide PNG が生成されること
+6. `Reload Exported Image` が成功すること
+7. relay inbox に `texture_exported` を追加し自動 reload されること
+8. blend 再読込後も Auto Sync 復元されること

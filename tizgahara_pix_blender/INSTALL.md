@@ -1,25 +1,33 @@
-# INSTALL
+# INSTALL (Blender Extension only)
 
-## Blender Extension
+この手順は Blender extension の build/validate/install のみを扱います。
+
+## 1) Validate source
 ```bash
 cd tizgahara_pix_blender
 blender --command extension validate
+```
+
+## 2) Build distributable zip
+```bash
+cd tizgahara_pix_blender
 mkdir -p dist
 blender --command extension build --output-dir ./dist
+```
+
+## 3) Validate built zip
+```bash
+cd tizgahara_pix_blender
 blender --command extension validate ./dist/tizgahara_pix_blender-0.1.0.zip
 ```
-Blender では `dist/tizgahara_pix_blender-0.1.0.zip` を Install from Disk してください。
 
-## Relay 前提セットアップ
-1. localhost relay server を起動（外部プロセス）
-2. relay が JSONL inbox へイベントを書き出す設定にする
-3. Blender Preferences で `relay_inbox_path` を同じファイルに設定
+## 4) Install from Disk
+Blender で `dist/tizgahara_pix_blender-0.1.0.zip` を Install from Disk します。
 
-## Aseprite 側
-- `aseprite_extension/` の scripts を extension 側へ組み込み
-- `relay_url`, `debounce_seconds`, `auto_sync_default` 等を設定
-- Open Blender Job 後に Auto Sync を有効化
+## 5) Runtime Preferences
+- Workspace Root
+- Aseprite Executable (任意)
+- Auto Sync / Relay 設定 (`relay_inbox_path` など)
 
-
-## Job JSON compatibility check
-- 生成JSONに `data.task.source_path` / `data.task.export_path` / `data.task.guides.uv_guide_path` / `data.task.width` / `height` / `color_mode` が含まれることを確認してください。
+## External dependency
+Aseprite 側 extension は別 repo `tizgahara-gif/aseprite_addon` を参照してください。

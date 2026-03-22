@@ -1,24 +1,37 @@
-# Tizgahara Pix Blender (Blender Extension)
+# Tizgahara Pix Blender
 
-Blender companion add-on + localhost relay 方式で、Aseprite export を Blender に自動反映します。
+**This repository contains only the Blender add-on / Blender extension.**
 
-## Relay 方式概要
-- Relay server は外部 localhost プロセス（Blender/Aseprite 本体外）
-- Aseprite は relay へ通知（WebSocket client 想定）
-- Blender は relay inbox(JSONL) を `bpy.app.timers` で poll
-- Blender 側での `Image.reload()` は main thread timer callback のみで実行
+Aseprite extension の実装・配布・導入手順はこの repo には含めません。Aseprite 側は別 repo `tizgahara-gif/aseprite_addon` を参照してください。
 
-## Job JSON schema（Aseprite互換 + backward compatible）
-- top-level (`schema`, `revision`, `asset`, `task`) を維持
-- `data` ラッパ配下にも同等情報を出力（Aseprite parser 向け）
-- 重要フィールド:
-  - `data.task.source_path`
-  - `data.task.export_path`
-  - `data.task.guides.uv_guide_path`
-  - `data.task.width` / `height` / `color_mode`
+## Scope (責務)
+この repo の責務は Blender 側のみです。
+- Generate Aseprite Job による job JSON 出力
+- source/export/guide path 生成
+- relay inbox(JSONL) poll による `Image.reload()` 自動反映
+
+## Requirements
+- Blender 4.2+
+
+## Blender Add-on 機能
+- **Generate Aseprite Job**: revision 付き job JSON を生成
+- **Export UV Guide**: UV guide PNG を出力
+- **Reload Exported Image**: export PNG を手動再読込
+- **Auto Sync (Relay)**: relay inbox 通知から自動再読込
+
+## Job JSON contract (external consumer 向け)
+Blender は以下を含む JSON を出力します（top-level + `data` ラッパ両方）。
+- `data.task.source_path`
+- `data.task.export_path`
+- `data.task.guides.uv_guide_path`
+- `data.task.width`
+- `data.task.height`
+- `data.task.color_mode`
+
+詳細な consumer 実装（Aseprite UI/command/package 構造）は `tizgahara-gif/aseprite_addon` 側で管理します。
 
 ## Auto Sync (Relay) 設定
-Preferences:
+Add-on Preferences:
 - `auto_sync_enabled`
 - `relay_enabled`
 - `relay_poll_interval`
@@ -28,34 +41,20 @@ Preferences:
 - `debug_sync_logging`
 
 N-panel:
-- `Auto Sync (Relay) > Enabled`
-- 状態表示 `Relay/Targets/Queue`
+- `Auto Sync (Relay)` ON/OFF
+- `Relay/Targets/Queue` 状態表示
 
-## Relay event format
-```json
-{
-  "event_id": "uuid-or-monotonic-id",
-  "type": "texture_exported",
-  "export_path": "C:/path/to/export.png",
-  "revision": 1,
-  "asset_name": "Cube",
-  "map_type": "EMISSION",
-  "timestamp": "2026-03-22T12:00:00Z"
-}
-```
+## 出力場所
+- jobs: `<workspace>/aseprite_jobs/*.json`
+- source: `<workspace>/sources/*.png`
+- export: `<workspace>/exports/*.png`
 
-## 導入手順（Blender 側）
-1. Extension build/validate を実行
-2. Blender へ `dist/*.zip` を Install from Disk
-3. Preferences で `relay_inbox_path` を設定
-4. Job 生成後、Aseprite 側が `texture_exported` を relay へ送る
-5. Relay が inbox にイベントを書き込むと Blender が自動 reload
+## relay_inbox_path
+- relay server は外部 localhost プロセス前提
+- Blender は `relay_inbox_path` の JSONL を timer polling
+- 各行は `texture_exported` イベント（`event_id` を含む）を想定
 
-## 手動 reload との違い
-- 手動: `Reload Exported Image` ボタンで即時 reload
-- Auto Sync: relay 通知 + settle delay 後に自動 reload
-
-## 既知制約
+## Known limitations
+- Packed image 非対応
+- relay server 本体はこの repo に含まれない
 - relay inbox は JSONL（1行1イベント）前提
-- relay server 本体は別プロセスとして用意が必要
-- Aseprite 側 WebSocket 実装は MVP スケルトン
