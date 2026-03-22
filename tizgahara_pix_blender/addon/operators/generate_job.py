@@ -9,7 +9,7 @@ from ..paths import ensure_base_dirs, file_stem_safe
 from ..recent_jobs import push_recent_job
 from ..revision import next_revision
 from ..uv_exporter import export_uv_layout
-from ..sync_watch import register_watch_for_image
+from ..relay_sync import register_export_target
 
 
 class BAC_OT_generate_job(bpy.types.Operator):
@@ -54,7 +54,7 @@ class BAC_OT_generate_job(bpy.types.Operator):
             scene_props.last_revision = rev
             asset.image.bac_image.linked_revision = rev
             asset.image.bac_image.linked_export_path = str(export_path)
-            register_watch_for_image(asset.image, export_path)
+            register_export_target(asset.image, export_path)
 
             self.report({"INFO"}, f"Generated job: {job_path.name}")
             return {"FINISHED"}

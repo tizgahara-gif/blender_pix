@@ -50,20 +50,21 @@ unzip -l ./dist/tizgahara_pix_blender-0.1.0.zip
 ---
 
 
-## 常時同期（Auto Sync）
-- 監視は `bpy.app.timers.register()` ベースで実行されます。
-- 監視対象は image ごとの `linked_export_path` です。
-- PNG の `mtime/size` 変化を検知すると、即時 reload せず `reload_settle_delay` 経過後に `Image.reload()` します。
+## 常時同期（Relay Auto Sync）
+- Blender 側は `bpy.app.timers.register()` で relay inbox を poll します（常駐 thread なし）。
+- relay から届く `texture_exported` 通知の `export_path` をキーに対応 image を特定します。
+- 通知受信後は即時 reload せず `reload_settle_delay` 経過後に `Image.reload()` します。
 
 ### Auto Sync 設定（Preferences）
-- `auto_sync_enabled`: 自動同期の ON/OFF
-- `sync_poll_interval`: ポーリング間隔（秒）
+- `relay_enabled`: relay 同期 ON/OFF
+- `relay_poll_interval`: relay inbox のポーリング間隔（秒）
+- `relay_inbox_path`: relay が追記する JSONL inbox ファイル
 - `reload_settle_delay`: 書き込み安定待ち時間（秒）
-- `debug_sync_logging`: 監視デバッグログ出力
+- `debug_sync_logging`: 同期デバッグログ出力
 
 ### パネル表示
-- パネル内 `Auto Sync > Enabled` で ON/OFF 切替
-- `Timer/Watched/Pending` の現在状態を表示
+- パネル内 `Auto Sync (Relay) > Enabled` で ON/OFF 切替
+- `Relay/Targets/Queue` の現在状態を表示
 
 ---
 

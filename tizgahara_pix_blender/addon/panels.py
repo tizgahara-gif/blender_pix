@@ -2,7 +2,7 @@ import bpy
 
 from .config import get_prefs
 from .constants import PANEL_CATEGORY
-from .sync_watch import sync_status_summary
+from .relay_sync import relay_status_summary
 
 
 class BAC_PT_main_panel(bpy.types.Panel):
@@ -26,9 +26,9 @@ class BAC_PT_main_panel(bpy.types.Panel):
 
         if prefs:
             sync_box = layout.box()
-            sync_box.label(text="Auto Sync")
-            sync_box.prop(prefs, "auto_sync_enabled", text="Enabled")
-            sync_box.label(text=sync_status_summary())
+            sync_box.label(text="Auto Sync (Relay)")
+            sync_box.prop(prefs, "relay_enabled", text="Enabled")
+            sync_box.label(text=relay_status_summary())
 
         col.separator()
         col.operator("bac.validate_asset", icon="CHECKMARK")

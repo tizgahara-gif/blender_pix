@@ -13,7 +13,7 @@ from .preferences import BAC_AddonPreferences
 from .props.addon_props import BAC_AddonProps
 from .props.image_props import BAC_ImageProps
 from .props.scene_props import BAC_SceneProps
-from .sync_watch import ensure_timer_registered, on_load_post, stop_timer
+from .relay_sync import ensure_timer_registered, on_load_post, stop_timer
 
 CLASSES = (
     BAC_AddonPreferences,

@@ -23,7 +23,8 @@
 - source は revision ごとにコピー/生成され、元画像を直接上書きしない
 
 
-## Auto Sync
-- Preferences で `auto_sync_enabled` を ON にすると export PNG を常時監視
-- 監視は `sync_poll_interval` 間隔で行い、更新検知後 `reload_settle_delay` 待ってから reload
-- blend 再読込後は linked export path から監視を復元
+## Auto Sync (Relay)
+- Preferences で `relay_enabled` を ON にすると relay inbox を常時 poll
+- relay の `texture_exported` 通知を受けると、対応 export path に紐づく image を queue へ積む
+- `reload_settle_delay` 後に `Image.reload()` を実行してビューポートへ反映
+- blend 再読込後は linked export path から registry を復元

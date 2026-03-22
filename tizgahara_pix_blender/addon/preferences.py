@@ -18,28 +18,36 @@ class BAC_AddonPreferences(bpy.types.AddonPreferences):
         description="Optional path to Aseprite executable",
         default="",
     )
-    auto_sync_enabled: bpy.props.BoolProperty(
-        name="Auto Sync Enabled",
-        description="Auto reload watched export PNG changes",
+
+    # Relay-based auto sync settings.
+    relay_enabled: bpy.props.BoolProperty(
+        name="Relay Auto Sync Enabled",
+        description="Enable localhost relay inbox polling for texture_exported events",
         default=True,
     )
-    sync_poll_interval: bpy.props.FloatProperty(
-        name="Sync Poll Interval",
-        description="Polling interval (seconds) for export file watcher",
+    relay_poll_interval: bpy.props.FloatProperty(
+        name="Relay Poll Interval",
+        description="Polling interval (seconds) for relay inbox",
         default=0.5,
         min=0.1,
         max=10.0,
     )
+    relay_inbox_path: bpy.props.StringProperty(
+        name="Relay Inbox Path",
+        subtype="FILE_PATH",
+        description="Path to relay inbox JSONL file (texture_exported events)",
+        default="",
+    )
     reload_settle_delay: bpy.props.FloatProperty(
         name="Reload Settle Delay",
-        description="Delay (seconds) before reloading changed file to avoid mid-write reload",
+        description="Delay (seconds) before queued Image.reload() after notify",
         default=0.35,
         min=0.0,
         max=5.0,
     )
     debug_sync_logging: bpy.props.BoolProperty(
         name="Debug Sync Logging",
-        description="Print watcher debug logs to console",
+        description="Print relay sync debug logs to console",
         default=False,
     )
 
@@ -49,8 +57,9 @@ class BAC_AddonPreferences(bpy.types.AddonPreferences):
         layout.prop(self, "aseprite_executable")
 
         box = layout.box()
-        box.label(text="Auto Sync")
-        box.prop(self, "auto_sync_enabled")
-        box.prop(self, "sync_poll_interval")
+        box.label(text="Relay Auto Sync")
+        box.prop(self, "relay_enabled")
+        box.prop(self, "relay_poll_interval")
+        box.prop(self, "relay_inbox_path")
         box.prop(self, "reload_settle_delay")
         box.prop(self, "debug_sync_logging")
