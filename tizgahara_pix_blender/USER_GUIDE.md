@@ -17,3 +17,9 @@
 - Save/Save As と Blender export は分離
 - relay 未接続時は notify 失敗しても extension は落とさない
 - guide layer は export に含めない
+
+
+## Job JSON 出力形式
+- top-level task は旧互換のため維持
+- `data.task.guides` はオブジェクト形式で出力 (`uv_guide_path`, `id_map_path`, `palette_path`, `mask_paths`, `extra_paths`)
+- `data.task.width` / `height` / `color_mode` を含む

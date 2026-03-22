@@ -8,11 +8,14 @@ Blender companion add-on + localhost relay 方式で、Aseprite export を Blend
 - Blender は relay inbox(JSONL) を `bpy.app.timers` で poll
 - Blender 側での `Image.reload()` は main thread timer callback のみで実行
 
-## Job JSON schema（nested）
-本 add-on は nested schema を出力します。
-- `data.task.source_path`
-- `data.task.export_path`
-- `data.task.guides`
+## Job JSON schema（Aseprite互換 + backward compatible）
+- top-level (`schema`, `revision`, `asset`, `task`) を維持
+- `data` ラッパ配下にも同等情報を出力（Aseprite parser 向け）
+- 重要フィールド:
+  - `data.task.source_path`
+  - `data.task.export_path`
+  - `data.task.guides.uv_guide_path`
+  - `data.task.width` / `height` / `color_mode`
 
 ## Auto Sync (Relay) 設定
 Preferences:
